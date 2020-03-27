@@ -1,21 +1,21 @@
 {
-  "name": "esmodules-boilerplate",
+  "name": "@joshadams/modaljs",
   "version": "1.0.0",
-  "description": "A template for creating modules in accordance with the es modules design pattern",
+  "description": "A pure JavaScript component for generating modals",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Joshua-W-Adams/esmodules-boilerplate.git"
+    "url": "git+https://github.com/Joshua-W-Adams/modaljs.git"
   },
   "author": "Joshua Adams",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Joshua-W-Adams/esmodules-boilerplate/issues"
+    "url": "https://github.com/Joshua-W-Adams/modaljs/issues"
   },
-  "homepage": "https://github.com/Joshua-W-Adams/esmodules-boilerplate#readme",
+  "homepage": "https://github.com/Joshua-W-Adams/modaljs#readme",
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",

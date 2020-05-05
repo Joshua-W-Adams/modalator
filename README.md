@@ -27,31 +27,35 @@ npm i modalator --save
 
 2. Either import into a Javascript Module OR add as a resource.
 
-2.1. Import
+    1. Import
 
-```
-<script type="module">
-  import { Modal } from './<location_of_modalator_installation>/modalator.js';
-  var modal = new Modal("Hello world");
-  modal.show();
-</script>
-```
+    ```javascript
+    <script type="module">
+      import { Modal } from './<location_of_modalator_installation>/modalator.js';
+      var modal = new Modal("Hello world");
+      modal.show();
+    </script>
+    ```
 
-2.2. Resource
+    2. Resource
 
-```
-<script defer type="text/javascript" src="/<location_of_modalator_installation>/modalator.js"></script>
-<script>
-  var modal = new Modal("Hello world");
-  modal.show();
-</script>
-```
+    ```javascript
+    <script defer type="text/javascript" src="/<location_of_modalator_installation>/modalator.js"></script>
+    <script>
+      var modal = new Modal("Hello world");
+      modal.show();
+    </script>
+    ```
 
 ### Useage
 
 There are a few ways to call the Modal as follows:
 
-1.	var modal = new Modal("Hello world");
+1.	Body only
+
+```javascript
+var modal = new Modal("Hello world");
+```
 
 This is the simplest method of calling the Modal as it is just to pass the main content and that will appear in the modal window. See the screenshot below.
  
@@ -59,25 +63,39 @@ This is the simplest method of calling the Modal as it is just to pass the main 
 
 There will be one close button and one close icon that will hide the modal window.
 
-2.	var modal = new Modal("Hi","Hello world");
+2.	Header and body
+
+```javascript
+var modal = new Modal("Hi","Hello world");
+```
 
 This is another simple method of calling modal by just passing the modal title and content to display. See the screenshot below.
 
 ![Alt text](/assets/img/screenshot-2.jpg?raw=true "Option 2")
 
-3.	var modal = new Modal("Hi","Hello world","close");
+3.	Header, body and button
+
+```javascript
+var modal = new Modal("Hi","Hello world","close");
+```
 
 This is another simple method of calling the modal by passing modal title, content, and close button text. Here we can over the ride the text of close button if necessary. 
 
 ![Alt text](/assets/img/screenshot-3.jpg?raw=true "Option 3")
 
-4.	var modal = new Modal(config);
+4.	Full customisation
+
+```javascript
+var modal = new Modal(config);
+```
 
 To create a fully customised modal with specific colors, styles, renderers and callback functions. Example in screenshot below.
 
 ![Alt text](/assets/img/screenshot-4.jpg?raw=true "Option 4")
 
 A config object must be passed to the Modal to customise it. Here is the sample object passed to the Modal function.
+
+```javascript
 let config = {
 	background: {      
 		style:	function () {
@@ -168,6 +186,7 @@ let config = {
 		}
 	} 
 }
+```
 
 ### Contributors
 

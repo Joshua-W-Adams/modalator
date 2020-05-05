@@ -7,107 +7,108 @@
     <!-- <link rel="stylesheet" type="text/css" href="dist/<some_css_file>.css"/> -->
   </head>
   <body spellcheck="false">
-    <div>Hello World</div>
+    <button id="hello" onclick="modal.show()"style="position:fixed;top:0px;left:0px;">show modal</button>
   </body>
 </html>
 <!-- <script defer type="module" src="src/js/module.js"></script> -->
 <script type="module">
 
-  import modaljs from '/src/js/module.js';
-
-  // Notes:
-  // - For all renderers if no callback function is passed, simply apply a
-  // default renderer producing the styles as shown in the default modal
-  // styles example image / link
-  // https://getbootstrap.com/docs/4.0/components/modal/
+  import { Modal } from './src/js/modalator.js';
+  
   let config = {
-    background: {
-      // callback function that can be passed to fully customise the styling of the
-      // background e.g. change colour, height, width, positioning, etc. e.g. have
-      // access to the elements object. All other renders provide same functionality
-      // as this one except made specific to the element they are rendering.
-      renderer: function (bgElement) {
-        bgElement.style.color = 'grey';
-        return bgElement;
-      }
+    background: {      
+      style:	function () {
+        let properties = {
+          "background":"#ccc",
+          "opacity":"0.7"
+        }
+        return properties;
+      }			
     },
     dialog: {
-      renderer: function (dialogElement) {},
-      header: {
+      style:	function () {
+        let properties = {
+          "background":"#FFD2D2"						
+        }
+        return properties;
+      },
+      header:{
         title: {
-          text: 'Some Title',
-          renderer: function (titleElement) {}
+          text:'Some Title',
+          style: function () {
+            let properties = {
+                  
+            }
+            return properties;
+          }
         },
-        description: {
-          text: 'Some Description (shows in header below title text)',
-          renderer: function (descriptionElement) {},
-        },
-        renderer: function (headerElement) {},
-        // default cross button in top right of modal
-        closeButton: {
-          callback: function () {
-            // some code to be run on clicking button.
-            // default to closing modal if no callback is passed.
-          },
-          renderer: function (closeButtonElement) {}
+        close_icon: {					
+          style: function () {
+            let properties = {
+                
+            }
+            return properties;
+          }
+        },		
+        style: function () {
+          let properties = {
+                    
+          }
+          return properties;
         }
       },
-      body: {
-        renderer: function (bodyElement) {},
-        // function that creates an element that is to be loaded into the body of
-        // the modal. E.g.
-        // <div>
-        //   <p>Modal body text goes here.</p>
-        // </div>
-        content: function () {
-          // example element creation for appending to content of modal
-          const element = document.createElement('div');
-          const p = document.createElement('p');
-          p.innerHTML = 'Modal body text goes here.'
-          element.appendChild(p);
-          return element;
+      body:{
+        content: {
+          text: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature",
+          style: function () {
+            let properties = {
+              
+            }
+            return properties;						
+          }					  
         }
       },
-      footer: {
-        renderer: function (footerElement) {},
-        // default close button in bottom right of modal
-        closeButton: {
-          text: 'Close',
-          callback: function () {
-            // some code to be run on clicking button.
-            // default to closing modal if no callback is passed.
-          },
-          renderer: function (closeButtonElement) {}
+      footer:{					
+        style: function () {
+          let properties = {
+            
+          }
+          return properties;	
         },
-        saveButton: {
-          text: 'Save Changes',
-          callback: function () {
-            // some code to be run on clicking button.
-            // default to doing nothing
+        buttons:{
+          button_one:{
+            text: "Close",
+            style: function () {
+              let properties = {									
+              }
+              return properties;
+            },
+            run: function(event){							
+              event.hide();							
+            }
+            
           },
-          renderer: function (saveButtonElement) {}
-        }
+          button_two:{
+          text: "Save Changes",
+            style: function () {
+              let properties = {
+                
+              }
+              return properties;
+            },
+            run: function(){
+              alert("ashok");
+            }
+            
+          }
+        }				
       }
-    }
+    } 
   }
+    
+  // window.modal = new Modal(config);
+  // window.modal = new Modal("Heelllo world");
+  // window.modal = new Modal("Hi","Hello world");
+  window.modal = new Modal("Hi","Hello world","Close it");
 
-  let modal = modaljs.init(config);
-
-  console.log(modal);
-
-  // Console log would produce information as follows:
-  // {
-  //   config: {
-  //     background: {
-  //       renderer: assigned default or custom renderer
-  //     },
-  //     dialog: {
-  //       renderer: assigned default or custom renderer
-  //       continue for all other properties specified in input config object.
-  //       ... etc.
-  //     }
-  //   }
-  //   e: entire modal element / modal parent
-  // }
-
-</script>
+  </script>

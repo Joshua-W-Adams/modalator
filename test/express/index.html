@@ -17,18 +17,18 @@
   
   let config = {
     background: {      
-      style:	function () {
+      style: function () {
         let properties = {
-          "background":"#ccc",
-          "opacity":"0.7"
+          'background':'#ccc',
+          'opacity':'0.7'
         }
         return properties;
-      }			
+      }      
     },
     dialog: {
-      style:	function () {
+      style:  function () {
         let properties = {
-          "background":"#FFD2D2"						
+          'background':'#FFD2D2'            
         }
         return properties;
       },
@@ -42,14 +42,14 @@
             return properties;
           }
         },
-        close_icon: {					
+        close_icon: {          
           style: function () {
             let properties = {
                 
             }
             return properties;
           }
-        },		
+        },    
         style: function () {
           let properties = {
                     
@@ -59,37 +59,37 @@
       },
       body:{
         content: {
-          text: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature",
+          text: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature`,
           style: function () {
             let properties = {
               
             }
-            return properties;						
-          }					  
+            return properties;            
+          }            
         }
       },
-      footer:{					
+      footer:{          
         style: function () {
           let properties = {
             
           }
-          return properties;	
+          return properties;  
         },
         buttons:{
           button_one:{
-            text: "Close",
+            text: 'Close',
             style: function () {
-              let properties = {									
+              let properties = {                  
               }
               return properties;
             },
-            run: function(event){							
-              event.hide();							
+            run: function(event){              
+              event.hide();              
             }
             
           },
           button_two:{
-          text: "Save Changes",
+          text: 'Save Changes',
             style: function () {
               let properties = {
                 
@@ -97,18 +97,18 @@
               return properties;
             },
             run: function(){
-              alert("ashok");
+              alert('ashok');
             }
             
           }
-        }				
+        }        
       }
     } 
   }
-    
+   
   // window.modal = new Modal(config);
-  // window.modal = new Modal("Heelllo world");
-  // window.modal = new Modal("Hi","Hello world");
-  window.modal = new Modal("Hi","Hello world","Close it");
+  // window.modal = new Modal('Heelllo world');
+  // window.modal = new Modal('Hi','Hello world');
+  window.modal = new Modal('Hi','Hello world','Close it');
 
   </script>

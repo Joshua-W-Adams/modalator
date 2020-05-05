@@ -5,14 +5,14 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Joshua-W-Adams/modaljs.git"
+    "url": "git+https://github.com/Joshua-W-Adams/modalator.git"
   },
   "author": "Joshua Adams",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Joshua-W-Adams/modaljs/issues"
+    "url": "https://github.com/Joshua-W-Adams/modalator/issues"
   },
-  "homepage": "https://github.com/Joshua-W-Adams/modaljs#readme",
+  "homepage": "https://github.com/Joshua-W-Adams/modalator#readme",
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",

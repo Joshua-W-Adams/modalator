@@ -14,20 +14,22 @@
 
 /* ============================= Private Methods ============================ */
 
-function _applyStyles(elementStyle, styles) {
-  // get keys to avoid looping through entire prototype chain
-  const arr = Object.keys(styles);
-  for (let i = 0; i < arr.length; i++) {
-    const style = arr[i];
-    elementStyle.cssText = elementStyle.cssText.concat(`${style} : ${styles[style]};`);
-  }
-}
+// TO DO - Replace individual loops for settings styles and applying user passed
+// renderers with generic style application functions.
+// function _applyStyles(elementStyle, styles) {
+//   // get keys to avoid looping through entire prototype chain
+//   const arr = Object.keys(styles);
+//   for (let i = 0; i < arr.length; i++) {
+//     const style = arr[i];
+//     elementStyle.cssText = elementStyle.cssText.concat(`${style} : ${styles[style]};`);
+//   }
+// }
 
-function _applyStyleRenderer(elementStyle, styles, modal, prop) {
-  if (!(typeof modal.isDefined(styles, prop) === 'undefined')) {
-    _applyStyles(elementStyle, styles[prop].style());
-  }
-}
+// function _applyStyleRenderer(elementStyle, styles, modal, prop) {
+//   if (!(typeof modal.isDefined(styles, prop) === 'undefined')) {
+//     _applyStyles(elementStyle, styles[prop].style());
+//   }
+// }
 
 /* ============================== Public Methods ============================ */
 
@@ -151,25 +153,51 @@ const Modal = function Modal(config, dialog_body, dialog_button) {
 
   data.dialog.setAttribute('id', 'democlass'); // for loop for adding style object to the overlay
 
-  const arr = [{
-    elementStyle: data.overlay.style,
-    styles: data.overlay_style,
-    prop: 'background'
-  }, {
-    elementStyle: data.dialog.style,
-    styles: data.dialog_style,
-    prop: 'dialog'
-  }];
+  // TO DO - Sample code for application of styles and user passed renders with generic loop.
 
-  // apply styles to all elements
-  for (let i = 0; i < arr.length; i++) {
-    const elementStyle = arr[i].elementStyle;
-    const styles = arr[i].styles;
-    const prop = arr[i].prop;
-    // apply default styles
-    _applyStyles(elementStyle, styles);
-    // apply user specified style renderer
-    _applyStyleRenderer(elementStyle, _this.config, this, prop);
+  // const arr = [{
+  //   elementStyle: data.overlay.style,
+  //   styles: data.overlay_style,
+  //   prop: 'background'
+  // }, {
+  //   elementStyle: data.dialog.style,
+  //   styles: data.dialog_style,
+  //   prop: 'dialog'
+  // }];
+
+  // // apply styles to all elements
+  // for (let i = 0; i < arr.length; i++) {
+  //   const elementStyle = arr[i].elementStyle;
+  //   const styles = arr[i].styles;
+  //   const prop = arr[i].prop;
+  //   // apply default styles
+  //   _applyStyles(elementStyle, styles);
+  //   // apply user specified style renderer
+  //   _applyStyleRenderer(elementStyle, _this.config, this, prop);
+  // }
+
+  for (const style in data.overlay_style) {
+    data.overlay.style.cssText = data.overlay.style.cssText.concat(style + ' : ' + data.overlay_style[style] + ';');
+  }
+
+  if (!(typeof this.isDefined(_this.config, 'background') === 'undefined')) {
+    for (const style in _this.config.background.style()) {
+      data.overlay.style.cssText = data.overlay.style.cssText.concat(style + ' : ' + _this.config.background.style()[style] + ';');
+    }
+  } // for loop for adding style object to the dialog
+
+  for (const style in data.dialog_style) {
+    data.dialog.style.cssText = data.dialog.style.cssText.concat(style + ' : ' + data.dialog_style[style] + ';');
+  }
+
+  if (!(typeof this.isDefined(_this.config, 'dialog') === 'undefined')) {
+    for (const style in _this.config.dialog.style()) {
+      data.dialog.style.cssText = data.dialog.style.cssText.concat(style + ' : ' + _this.config.dialog.style()[style] + ';');
+    }
+  } // for loop for adding style object to the dialog header
+
+  for (const style in data.dialog_header_style) {
+    data.dialog_header.style.cssText = data.dialog_header.style.cssText.concat(style + ' : ' + data.dialog_header_style[style] + ';');
   }
 
   if (!(typeof this.isDefined(_this.config, 'dialog.header') === 'undefined')) {
@@ -288,8 +316,8 @@ Modal.prototype.show = function () {
   document.body.append(_this.data.modal);
   let top_position = (screen.availHeight - _this.data.dialog.offsetHeight) / 2;
   top_position = top_position > 50 ? top_position : '50px';
-  _this.data.dialog.style.left = (window.innerWidth - _this.data.dialog.offsetWidth) / 2;
-  _this.data.dialog.style.top = top_position;
+  _this.data.dialog.style.left = ((window.innerWidth - _this.data.dialog.offsetWidth) / 2).toString() + 'px';
+  _this.data.dialog.style.top = top_position.toString() + 'px';
   _this.data.overlay.style.display = 'block';
   _this.data.dialog.style.transition = 'all 0.5s';
   _this.data.dialog_header_close_icon.onclick = function () {

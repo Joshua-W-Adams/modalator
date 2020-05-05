@@ -28,7 +28,7 @@
     dialog: {
       style:  function () {
         let properties = {
-          'background':'#FFD2D2'            
+          
         }
         return properties;
       },
@@ -37,7 +37,7 @@
           text:'Some Title',
           style: function () {
             let properties = {
-                  
+              'color': 'black'
             }
             return properties;
           }
@@ -45,14 +45,14 @@
         close_icon: {          
           style: function () {
             let properties = {
-                
+              'color': 'red'
             }
             return properties;
           }
         },    
         style: function () {
           let properties = {
-                    
+            'border-bottom': 'solid 1px #dadce0' 
           }
           return properties;
         }
@@ -60,9 +60,14 @@
       body:{
         content: {
           text: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature`,
+          // text: function () {
+          //   let div = document.createElement('div');
+          //   div.innerHTML = 'hello';
+          //   return div;   
+          // },
           style: function () {
             let properties = {
-              
+              'color': 'black'
             }
             return properties;            
           }            
@@ -71,7 +76,7 @@
       footer:{          
         style: function () {
           let properties = {
-            
+            'border-top': 'solid 1px #dadce0' 
           }
           return properties;  
         },
@@ -79,27 +84,26 @@
           button_one:{
             text: 'Close',
             style: function () {
-              let properties = {                  
+              let properties = {       
+                'background-color': '#5a6268'
               }
               return properties;
             },
             run: function(event){              
               event.hide();              
             }
-            
           },
           button_two:{
           text: 'Save Changes',
             style: function () {
               let properties = {
-                
+                'background-color': '#007bff'
               }
               return properties;
             },
             run: function(){
               alert('ashok');
             }
-            
           }
         }        
       }
@@ -111,4 +115,6 @@
   // window.modal = new Modal('Hi','Hello world');
   // window.modal = new Modal('Hi','Hello world','Close it');
 
-  </script>
+  window.modal.show();
+
+</script>

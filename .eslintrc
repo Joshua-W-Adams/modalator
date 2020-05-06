@@ -23,6 +23,17 @@
     "no-continue": 0,
     "func-names": 0,
     "camelcase": 0,
-    "quote-props": 0
+    "quote-props": 0,
+    "import/prefer-default-export": 0,
+    "no-mixed-operators": 0,
+    "space-infix-ops": 0,
+    "no-bitwise": 0,
+    "prefer-template": 0,
+    "no-restricted-globals": 0,
+    "no-array-constructor": 0,
+    "no-else-return": 0,
+    "max-len": 0,
+    "guard-for-in": 0,
+    "no-restricted-syntax": 0
   }
 }

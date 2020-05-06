@@ -38,13 +38,19 @@
 const Modal = function Modal(config, dialog_body, dialog_button) {
   const _this = this;
   _this.config = config;
-  _this.dialog_title = '';
-  _this.dialog_body = '';
-  _this.dialog_button = '';
-
+  _this.dialog_title = "";
+  _this.dialog_body = "";
+  _this.dialog_button = "";
+  
   if (typeof (config) === 'object') {
-    _this.dialog_title = _this.config.dialog.header.title.text;
-    _this.dialog_body = _this.config.dialog.body.content.text;
+    _this.dialog_title = _this.config.dialog.header.title.text().outerHTML;
+    if (typeof _this.config.dialog.header.title.text() === "string") {
+		  _this.dialog_title = _this.config.dialog.header.title.text();
+	  }  
+    _this.dialog_body = _this.config.dialog.body.content.text().outerHTML;
+    if (typeof _this.config.dialog.body.content.text() === "string") {
+		  _this.dialog_body = _this.config.dialog.body.content.text();
+	  } 
     _this.dialog_button_one = _this.config.dialog.footer.buttons.button_one.text;
     if (!(typeof _this.isDefined(_this.config, 'dialog.footer.buttons.button_two.text') === 'undefined')) {
       _this.dialog_button_two = _this.config.dialog.footer.buttons.button_two.text;
@@ -108,11 +114,14 @@ const Modal = function Modal(config, dialog_body, dialog_button) {
     dialog_header_title_style: {
       'font-weight': '500',
       'color': '#212529',
-      'font-size': '20px'
+      'font-size': '20px',
+	    'float': 'left'
     },
-    dialog_header_close_icon_style: {
-      'display': 'block',
-      'float': 'right',
+    dialog_header_close_icon_style: {      
+      'position': 'absolute',
+	    'top': '0px',
+	    'right': '0px',
+	    'padding': '4px 12px',
       'color': '#C5C5C5',
       'font-size': '20px',
       'font-weight': '700',
@@ -224,7 +233,18 @@ const Modal = function Modal(config, dialog_body, dialog_button) {
     for (const style in _this.config.dialog.header.close_icon.style()) {
       data.dialog_header_close_icon.style.cssText = data.dialog_header_close_icon.style.cssText.concat(style + ' : ' + _this.config.dialog.header.close_icon.style()[style] + ';');
     }
-  } // for loop for adding style object to the dialog header text
+
+  } //for loop for adding style object to the dialog header	text	
+  
+	//code to make the hover function over close x button
+	data.dialog_header_close_icon.setAttribute('data-color',data.dialog_header_close_icon.style.color);
+	data.dialog_header_close_icon.onmouseover = function(){		
+		data.dialog_header_close_icon.style.color= _this.adjust_brightness(_this.getRGBCode(data.dialog_header_close_icon.style.color,_this),16);				
+	};
+	data.dialog_header_close_icon.onmouseout = function(){		
+		data.dialog_header_close_icon.style.color= data.dialog_header_close_icon.getAttribute('data-color');		
+	};
+	//code to make the hover function over close x button
 
   for (const style in data.dialog_body_style) {
     data.dialog_body.style.cssText = data.dialog_body.style.cssText.concat(style + ' : ' + data.dialog_body_style[style] + ';');
@@ -264,6 +284,16 @@ const Modal = function Modal(config, dialog_body, dialog_button) {
     }
   }
 
+	//code to make the hover function
+	data.dialog_footer_button_one.setAttribute('data-background',data.dialog_footer_button_one.style.background);
+	data.dialog_footer_button_one.onmouseover = function(){		
+		data.dialog_footer_button_one.style.background= _this.adjust_brightness(_this.getRGBCode(data.dialog_footer_button_one.style.background,_this),16);				
+	};
+	data.dialog_footer_button_one.onmouseout = function(){		
+		data.dialog_footer_button_one.style.background= data.dialog_footer_button_one.getAttribute('data-background');		
+	};
+	//end of code to make the hover function
+	
   if (!(typeof this.isDefined(_this.config, 'dialog.footer.buttons.button_two.text') === 'undefined')) {
     // for loop for adding style object to the dialog header text
     for (const style in data.dialog_footer_button_two_style) {
@@ -275,7 +305,16 @@ const Modal = function Modal(config, dialog_body, dialog_button) {
     }
 
     data.dialog_footer_button_two.innerHTML = _this.dialog_button_two;
-
+	
+	//code to make the hover function
+	data.dialog_footer_button_two.setAttribute('data-background',data.dialog_footer_button_two.style.background);	
+	data.dialog_footer_button_two.onmouseover = function(){		
+		data.dialog_footer_button_two.style.background= _this.adjust_brightness(_this.getRGBCode(data.dialog_footer_button_two.style.background,_this),16);				
+	};
+	data.dialog_footer_button_two.onmouseout = function(){		
+		data.dialog_footer_button_two.style.background= data.dialog_footer_button_two.getAttribute('data-background');		
+	};
+	//end of code to make the hover function
     data.dialog_footer_button_two.onclick = function () {
       _this.config.dialog.footer.buttons.button_two.run();
     };
@@ -337,6 +376,22 @@ Modal.prototype.isDefined = function isDefined(_this, key) {
     return typeof o === 'undefined' || o === null ? o : o[x];
   }, _this);
 };
+
+//Function to convert rgb color to hex format
+Modal.prototype.getRGBCode = function(rgb_code,_this) {
+	rgb_code = rgb_code.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+	return "#" + _this.getHex(rgb_code[1],_this) + _this.getHex(rgb_code[2]) + _this.getHex(rgb_code[3]);
+}
+Modal.prototype.getHex = function (x) {
+	var hexDigits = new Array("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f");
+	return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+ }
+Modal.prototype.adjust_brightness = function (hex_code, percent){
+    var r = parseInt(hex_code.substr(1, 2), 16),
+        g = parseInt(hex_code.substr(3, 2), 16),
+        b = parseInt(hex_code.substr(5, 2), 16);
+   return '#' + ((0|(1<<8) + r * (100 - percent) / 100).toString(16)).substr(1) + ((0|(1<<8) + g * (100 - percent) / 100).toString(16)).substr(1) + ((0|(1<<8) + b * (100 - percent) / 100).toString(16)).substr(1);
+}
 
 /* =========================== Export Public APIs =========================== */
 

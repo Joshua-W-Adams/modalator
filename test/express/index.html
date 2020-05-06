@@ -10,10 +10,10 @@
     <button id="hello" onclick="modal.show()"style="position:fixed;top:0px;left:0px;">show modal</button>
   </body>
 </html>
-<!-- <script defer type="module" src="src/js/module.js"></script> -->
-<script type="module">
-
-  import { Modal } from './src/js/modalator.js';
+<!-- <script defer type="module" src="src/js/module.js"></script> --->
+<script type="module" src="./src/js/modalator.js"></script>
+<script type="module" >
+import { Modal } from "./src/js/modalator.js"
   
   let config = {
     background: {      
@@ -28,13 +28,18 @@
     dialog: {
       style:	function () {
         let properties = {
-          "background":"#FFD2D2"						
+          //"background":"#FFD2D2"						
         }
         return properties;
       },
       header:{
         title: {
-          text:'Some Title',
+          text: function () {
+             let div = document.createElement('div');
+             div.innerHTML = 'I am a title';
+			// let div = "heelo"
+             return div;   
+           },
           style: function () {
             let properties = {
                   
@@ -59,8 +64,13 @@
       },
       body:{
         content: {
-          text: "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature",
-          style: function () {
+			text: function () {
+             let div = document.createElement('div');
+             div.innerHTML = 'I am a body';
+			 //let div = "heelo"
+             return div;   
+           },
+		   style: function () {
             let properties = {
               
             }
@@ -106,9 +116,9 @@
     } 
   }
     
-  // window.modal = new Modal(config);
+   window.modal = new Modal(config);
   // window.modal = new Modal("Heelllo world");
   // window.modal = new Modal("Hi","Hello world");
-  window.modal = new Modal("Hi","Hello world","Close it");
+  //window.modal = new Modal("Hi","Hello world","Close it");
 
   </script>

@@ -32,7 +32,7 @@ npm i modalator --save
     ```javascript
     <script type="module">
       import { Modal } from './<location_of_modalator_installation>/modalator.js';
-      var modal = new Modal("Hello world");
+      var modal = new Modal('Hello world');
       modal.show();
     </script>
     ```
@@ -42,7 +42,7 @@ npm i modalator --save
     ```javascript
     <script defer type="text/javascript" src="/<location_of_modalator_installation>/modalator.js"></script>
     <script>
-      var modal = new Modal("Hello world");
+      var modal = new Modal('Hello world');
       modal.show();
     </script>
     ```
@@ -54,7 +54,7 @@ There are a few ways to call the Modal as follows:
 1.  Body only
 
 ```javascript
-var modal = new Modal("Hello world");
+var modal = new Modal('Hello world');
 ```
 
 This is the simplest method of calling the Modal as it is just to pass the main content and that will appear in the modal window. See the screenshot below.
@@ -66,7 +66,7 @@ There will be one close button and one close icon that will hide the modal windo
 2.  Header and body
 
 ```javascript
-var modal = new Modal("Hi","Hello world");
+var modal = new Modal('Hi','Hello world');
 ```
 
 This is another simple method of calling modal by just passing the modal title and content to display. See the screenshot below.
@@ -76,7 +76,7 @@ This is another simple method of calling modal by just passing the modal title a
 3.  Header, body and button
 
 ```javascript
-var modal = new Modal("Hi","Hello world","close");
+var modal = new Modal('Hi','Hello world','close');
 ```
 
 This is another simple method of calling the modal by passing modal title, content, and close button text. Here we can over the ride the text of close button if necessary. 
@@ -100,8 +100,8 @@ let config = {
   background: {      
     style: function () {
       let properties = {
-        "background":"#ccc",
-        "opacity":"0.7"
+        'background':'#ccc',
+        'opacity':'0.7'
       }
       return properties;
     }      
@@ -109,7 +109,7 @@ let config = {
   dialog: {
     style:  function () {
       let properties = {
-        "background":"#FFD2D2"            
+        'background':'#FFD2D2'            
       }
       return properties;
     },
@@ -158,7 +158,7 @@ let config = {
       },
       buttons:{
         button_one:{
-          text: "Close",
+          text: 'Close',
           style: function () {
             let properties = {                  
             }
@@ -170,7 +170,7 @@ let config = {
           
         },
         button_two:{
-        text: "Save Changes",
+        text: 'Save Changes',
           style: function () {
             let properties = {
               
@@ -178,7 +178,7 @@ let config = {
             return properties;
           },
           run: function(){
-            alert("ashok");
+            alert('ashok');
           }
           
         }

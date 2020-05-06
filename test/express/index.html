@@ -17,16 +17,16 @@ import { Modal } from "./src/js/modalator.js"
   
   let config = {
     background: {      
-      style:	function () {
+      style: function () {
         let properties = {
-          "background":"#ccc",
-          "opacity":"0.7"
+          'background':'#ccc',
+          'opacity':'0.7'
         }
         return properties;
-      }			
+      }      
     },
     dialog: {
-      style:	function () {
+      style:  function () {
         let properties = {
           //"background":"#FFD2D2"						
         }
@@ -42,83 +42,84 @@ import { Modal } from "./src/js/modalator.js"
            },
           style: function () {
             let properties = {
-                  
+              'color': 'black'
             }
             return properties;
           }
         },
-        close_icon: {					
+        close_icon: {          
           style: function () {
             let properties = {
-                
+              'color': 'red'
             }
             return properties;
           }
-        },		
+        },    
         style: function () {
           let properties = {
-                    
+            'border-bottom': 'solid 1px #dadce0' 
           }
           return properties;
         }
       },
       body:{
         content: {
-			text: function () {
+			    text: function () {
              let div = document.createElement('div');
              div.innerHTML = 'I am a body';
-			 //let div = "heelo"
+			        //let div = "heelo"
              return div;   
            },
-		   style: function () {
+		       style: function () {
             let properties = {
-              
+              'color': 'black'
             }
-            return properties;						
-          }					  
+            return properties;            
+          }            
         }
       },
-      footer:{					
+      footer:{          
         style: function () {
           let properties = {
-            
+            'border-top': 'solid 1px #dadce0' 
           }
-          return properties;	
+          return properties;  
         },
         buttons:{
           button_one:{
-            text: "Close",
+            text: 'Close',
             style: function () {
-              let properties = {									
+              let properties = {       
+                'background-color': '#5a6268'
               }
               return properties;
             },
-            run: function(event){							
-              event.hide();							
+            run: function(event){              
+              event.hide();              
             }
-            
           },
           button_two:{
-          text: "Save Changes",
+          text: 'Save Changes',
             style: function () {
               let properties = {
-                
+                'background-color': '#007bff'
               }
               return properties;
             },
             run: function(){
-              alert("ashok");
+              alert('ashok');
             }
-            
           }
-        }				
+        }        
       }
     } 
   }
-    
-   window.modal = new Modal(config);
-  // window.modal = new Modal("Heelllo world");
-  // window.modal = new Modal("Hi","Hello world");
-  //window.modal = new Modal("Hi","Hello world","Close it");
+   
+  window.modal = new Modal(config);
+  // window.modal = new Modal('Heelllo world');
+  // window.modal = new Modal('Hi','Hello world');
+  // window.modal = new Modal('Hi','Hello world','Close it');
 
-  </script>
+  window.modal.show();
+
+</script>

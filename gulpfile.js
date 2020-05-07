@@ -34,8 +34,8 @@ const settings = {
 			// import * as something 'from' x
 			// property descriptions define the name that will be exported to compiled
 			// js code
-			"some-module-1": "someModule1",
-		 "./dist/some-module-2.js": "someModule2"
+		// 	"some-module-1": "someModule1",
+		//  "./dist/some-module-2.js": "someModule2"
 	  }
 		// list of dependancies to ADD to the compiled css files
 		, css: []   // 'dep1_location/dep1.css', 'etc.'
@@ -45,7 +45,7 @@ const settings = {
 
 const paths = {
 	inputs: {
-		index: "./src/js/module.js"
+		index: "./src/js/modalator.js"
 		, js: ["./src/js/**/*.js"]
 		, sass: ["./src/sass/**/*.scss"]
 	}
@@ -65,7 +65,8 @@ function getWebpackCnf (name) {
 			libraryTarget: 'var',
       library: pkg.name.replace('-', ''),
 	  },
-		externals: {},
+	  // exclude dependacies from the webpack output by listing them here
+	  externals: {},
 	  optimization: {
 	    minimize: false
 	  },
@@ -169,12 +170,18 @@ gulp.task('js-min-no-dep', function (done) {
 
 gulp.task('js-with-dep', function (done) {
   var entry = paths.inputs.index,
-			cnf = getWebpackCnf(pkg.name + ".full");
+	cnf = getWebpackCnf(pkg.name + ".full");
 	cnf.externals = {
 		"some-module-1": "someModule1",
 		"./dist/some-module-2.js": "someModule2"
 	};
-  return compileJs(entry, cnf, done);
+  // check for empty object (no dependancies) 
+  if (Object.keys(settings.dependancies.js).length === 0 && settings.dependancies.js.constructor === Object) {
+	// No dependancies in package. Call done and end task.
+	done();
+  } else {
+	return compileJs(entry, cnf, done);
+  }
 })
 
 gulp.task('js-min-with-dep', function (done) {
@@ -185,7 +192,13 @@ gulp.task('js-min-with-dep', function (done) {
 		"./dist/some-module-2.js": "someModule2"
 	};
 	cnf.optimization = { minimize: true };
-  return compileJs(entry, cnf, done);
+  // check for empty object (no dependancies) 
+  if (Object.keys(settings.dependancies.js).length === 0 && settings.dependancies.js.constructor === Object) {
+	// No dependancies in package. Call done and end task.
+	done();
+  } else {
+	return compileJs(entry, cnf, done);
+  }
 })
 
 gulp.task('css-no-dep', function (done) {

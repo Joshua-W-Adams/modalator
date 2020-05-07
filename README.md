@@ -40,9 +40,9 @@ npm i modalator --save
     2. Resource
 
     ```javascript
-    <script defer type="text/javascript" src="/<location_of_modalator_installation>/modalator.js"></script>
+    <script type="text/javascript" src="/dist/modalator.min.js"></script>
     <script>
-      var modal = new Modal('Hello world');
+      var modal = new modalator.Modal('Hello world');
       modal.show();
     </script>
     ```

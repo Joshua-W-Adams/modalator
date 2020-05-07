@@ -4,15 +4,23 @@
     <title>Module Test Server</title>
     <base href="/">
     <meta charset="utf-8">
-    <!-- <link rel="stylesheet" type="text/css" href="dist/<some_css_file>.css"/> -->
   </head>
   <body spellcheck="false">
     <button id="hello" onclick="modal.show()"style="position:fixed;top:0px;left:0px;">show modal</button>
   </body>
 </html>
-<!-- <script defer type="module" src="src/js/module.js"></script> --->
-<script type="module" src="./src/js/modalator.js"></script>
-<script type="module" >
+<!-- 
+  Sample code for calling modalator with ECMA5 syntax
+-->
+<!-- <script type="text/javascript" src="/dist/modalator.min.js"></script>
+<script>
+  var modal = new modalator.Modal('Hello world');
+  modal.show();
+</script> -->
+<!-- 
+  Sample code for calling modalator with ECMA6 syntax
+-->
+<script type="module">
 import { Modal } from "./src/js/modalator.js"
   
   let config = {

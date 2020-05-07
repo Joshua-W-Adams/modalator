@@ -58,7 +58,7 @@ var modal = new Modal('Hello world');
 ```
 
 This is the simplest method of calling the Modal as it is just to pass the main content and that will appear in the modal window. See the screenshot below.
- 
+
 ![Alt text](/assets/img/screenshot-1.jpg?raw=true "Option 1")
 
 There will be one close button and one close icon that will hide the modal window.
@@ -79,7 +79,7 @@ This is another simple method of calling modal by just passing the modal title a
 var modal = new Modal('Hi','Hello world','close');
 ```
 
-This is another simple method of calling the modal by passing modal title, content, and close button text. Here we can over the ride the text of close button if necessary. 
+This is another simple method of calling the modal by passing modal title, content, and close button text. Here we can over the ride the text of close button if necessary.
 
 ![Alt text](/assets/img/screenshot-3.jpg?raw=true "Option 3")
 
@@ -107,18 +107,22 @@ let config = {
     }      
   },
   dialog: {
-    style:  function () {
+    style: function () {
       let properties = {
-        'background':'#FFD2D2'            
+        //"background":"#FFD2D2"						
       }
       return properties;
     },
     header:{
       title: {
-        text:'Some Title',
+        text: function () {
+           let div = document.createElement('div');
+           div.innerHTML = 'I am a title';
+           return div;   
+         },
         style: function () {
           let properties = {
-                
+            'color': 'black'
           }
           return properties;
         }
@@ -126,24 +130,29 @@ let config = {
       close_icon: {          
         style: function () {
           let properties = {
-              
+            'color': 'rgb(255,0,0)'
           }
           return properties;
         }
       },    
       style: function () {
         let properties = {
-                  
+          'border-bottom': 'solid 1px #dadce0'
         }
         return properties;
       }
     },
     body:{
       content: {
-        text: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature`,
-        style: function () {
+        text: function () {
+           let div = document.createElement('div');
+           div.innerHTML = 'I am a body';
+            //let div = "heelo"
+           return div;   
+         },
+         style: function () {
           let properties = {
-            
+            'color': 'black'
           }
           return properties;            
         }            
@@ -152,7 +161,7 @@ let config = {
     footer:{          
       style: function () {
         let properties = {
-          
+          'border-top': 'solid 1px #dadce0'
         }
         return properties;  
       },
@@ -160,31 +169,30 @@ let config = {
         button_one:{
           text: 'Close',
           style: function () {
-            let properties = {                  
+            let properties = {       
+              'background-color': '#5a6268'
             }
             return properties;
           },
           run: function(event){              
             event.hide();              
           }
-          
         },
         button_two:{
         text: 'Save Changes',
           style: function () {
             let properties = {
-              
+              'background-color': '#007bff'
             }
             return properties;
           },
           run: function(){
             alert('ashok');
           }
-          
         }
       }        
     }
-  } 
+  }
 }
 ```
 

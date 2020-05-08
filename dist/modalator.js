@@ -135,18 +135,8 @@ var Modal = function Modal(config, dialog_body, dialog_button) {
   _this.dialog_button = '';
 
   if (_typeof(config) === 'object') {
-    _this.dialog_title = _this.config.dialog.header.title.text().outerHTML;
-
-    if (typeof _this.config.dialog.header.title.text() === 'string') {
-      _this.dialog_title = _this.config.dialog.header.title.text();
-    }
-
-    _this.dialog_body = _this.config.dialog.body.content.text().outerHTML;
-
-    if (typeof _this.config.dialog.body.content.text() === 'string') {
-      _this.dialog_body = _this.config.dialog.body.content.text();
-    }
-
+    _this.dialog_title = _this.config.dialog.header.title.text();
+    _this.dialog_body = _this.config.dialog.body.content.text();
     _this.dialog_button_one = _this.config.dialog.footer.buttons.button_one.text;
 
     if (!(typeof _this.isDefined(_this.config, 'dialog.footer.buttons.button_two.text') === 'undefined')) {
@@ -427,10 +417,11 @@ var Modal = function Modal(config, dialog_body, dialog_button) {
     };
 
     data.dialog_footer_child.append(data.dialog_footer_button_two);
-  }
+  } // default styled element c/w overrides from user + passed content appended
 
-  data.dialog_header_title.innerHTML = _this.dialog_title;
-  data.dialog_body.innerHTML = _this.dialog_body;
+
+  data.dialog_header_title.append(_this.dialog_title);
+  data.dialog_body.append(_this.dialog_body);
   data.dialog_footer_button_one.innerHTML = _this.dialog_button_one;
   data.dialog_header_close_icon.innerHTML = 'x'; // data.dialog_footer_button_one.onclick = _this.config.dialog.footer.buttons.button_one.run();
 

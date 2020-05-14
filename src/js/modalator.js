@@ -9,7 +9,9 @@
 // module that handles generating gui components from passed data structure
 // / = relative to server location
 // ./ = relative to file location
-import componator from '/node_modules/componator/src/js/componator.js'
+import componator from '/node_modules/componator/src/js/componator.js';
+// for webpack
+// import componator from '../../node_modules/componator/src/js/componator';
 
 /* ================================ Variables =============================== */
 
@@ -23,7 +25,7 @@ function _preventDefault(event) {
 
 // default data structure to generate a modal
 function _getDefaultConfig(_this) {
-  let config = [{
+  const config = [{
     name: 'modal',
     element: {
       value: 'div'
@@ -129,7 +131,7 @@ function _getDefaultConfig(_this) {
           },
           style: {
             height: '45px'
-          }, 
+          },
           child: [{
             name: 'dialog_footer_button_two',
             element: {
@@ -217,7 +219,7 @@ function _userConfigTemplate(title, body, button) {
 function _getUserConfig(userConfig, dialog_body, dialog_button) {
   // case 1 - user passes config object or empty value
   if (typeof userConfig === 'object') {
-    return userConfig
+    return userConfig;
   // case 2 - user passes non object
   } else {
     // create config object to store string values
@@ -237,17 +239,25 @@ function _getUserConfig(userConfig, dialog_body, dialog_button) {
   }
 }
 
+function _addFunctions(component, functions) {
+  if (functions) {
+    for (let i = 0; i < functions.length; i++) {
+      const f = functions[i];
+      component.__proto__[f.name] = f;
+    }
+  }
+}
+
 /* ============================== Public Methods ============================ */
 
-function show () {
+function show() {
   // refer to object that contains the _show function as prototype
   const _this = this;
   // get parent element
-  let modal = componator.findElement(_this.finalConfig, 'name', 'modal').element
+  const modal = componator.findElement(_this.finalConfig, 'name', 'modal').element;
   // get remaining elements
   const dialog = componator.findChildElement(_this.finalConfig, 'name', 'dialog').element;
   const overlay = componator.findChildElement(_this.finalConfig, 'name', 'overlay').element;
-  const dialog_header_close_icon = componator.findChildElement(_this.finalConfig, 'name', 'dialog_header_close_icon').element;
   // append parent to DOM
   document.body.append(modal);
   // calculate position of modal
@@ -258,10 +268,10 @@ function show () {
   // display modal
   overlay.style.display = 'block';
   dialog.style.transition = 'all 0.5s';
-};
+}
 
 // hide the modal window and release the config object
-function hide () {
+function hide() {
   // refer to object that contains the _show function as prototype
   const _this = this;
   // get elements
@@ -270,18 +280,9 @@ function hide () {
   // hide modal
   overlay.style.display = 'none';
   dialog.style.top = '-1000px';
-};
-
-function _addFunctions(component, functions) {
-  if (functions) {
-    for (let i = 0; i < functions.length; i++) {
-      let f = functions[i];
-      component.__proto__[f.name] = f;
-    }
-  }
 }
 
-function buildModal (userConfig, dialog_body, dialog_button) {
+function buildModal(userConfig, dialog_body, dialog_button) {
   // create component
   const component = {};
   // get prototype functions to assign to component
@@ -295,7 +296,7 @@ function buildModal (userConfig, dialog_body, dialog_button) {
   // user configuration overrides to default configuration modal
   userConfig = _getUserConfig(userConfig, dialog_body, dialog_button);
   // construct default component and append / override with user details
-  let modal = componator.buildComponent(defaultConfig, userConfig, component);
+  const modal = componator.buildComponent(defaultConfig, userConfig, component);
   return modal;
 }
 

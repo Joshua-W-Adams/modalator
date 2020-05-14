@@ -12,7 +12,7 @@
 <!-- 
   Sample code for calling modalator with ECMA5 syntax
 -->
-<!-- <script type="text/javascript" src="/dist/modalator.min.js"></script>
+<!-- <script type="text/javascript" src="/dist/modalator.full.js"></script>
 <script>
   var modal = modalator.default.buildModal('Hello world');
   modal.show();
@@ -63,6 +63,9 @@
           name: 'dialog_footer_child',
           child: [{
             name: 'dialog_footer_button_two',
+            element: {
+              content: 'Click Me'
+            },
             style: function () {
               let properties = {
                 'background-color': '#007bff'
@@ -72,7 +75,7 @@
           }, {
             name: 'dialog_footer_button_one',
             element: {
-              content: 'hello'
+              content: 'Hello'
             },
             style: function () {
               let properties = {       

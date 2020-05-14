@@ -14,7 +14,7 @@ This modal is:
 - Easy to Use - Create a modal with one line of code.
 - Fully Customisable - Multiple construction options to fully configure the modal content and operation. Change the background color, text color, button color, render custom elements and customise callback functions for onclick operations.
 - Beautifully Styled - Beautifully styled by default out of the box.
-- Tiny - X kb source code and Y kb minified code
+- Tiny - 30 kb source code and 12 kb minified code
 
 ## Getting Started
 
@@ -41,7 +41,7 @@ npm i modalator --save
     2. Resource
 
     ```javascript
-    <script type="text/javascript" src="/<location_of_modalator_installation>/modalator.min.js"></script>
+    <script type="text/javascript" src="/<location_of_modalator_installation>//dist/modalator.full.js"></script>
     <script>
       const modal = modalator.default.buildModal('Hello world');
       modal.show();

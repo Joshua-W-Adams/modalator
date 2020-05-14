@@ -14,6 +14,7 @@ This modal is:
 - Easy to Use - Create a modal with one line of code.
 - Fully Customisable - Multiple construction options to fully configure the modal content and operation. Change the background color, text color, button color, render custom elements and customise callback functions for onclick operations.
 - Beautifully Styled - Beautifully styled by default out of the box.
+- Tiny - X kb source code and Y kb minified code
 
 ## Getting Started
 
@@ -31,8 +32,8 @@ npm i modalator --save
 
     ```javascript
     <script type="module">
-      import { Modal } from './<location_of_modalator_installation>/modalator.js';
-      var modal = new Modal('Hello world');
+      import modalator from './<location_of_modalator_installation>/modalator.js';
+      const modal = modalator.buildModal();
       modal.show();
     </script>
     ```
@@ -40,9 +41,9 @@ npm i modalator --save
     2. Resource
 
     ```javascript
-    <script type="text/javascript" src="/dist/modalator.min.js"></script>
+    <script type="text/javascript" src="/<location_of_modalator_installation>/modalator.min.js"></script>
     <script>
-      var modal = new modalator.Modal('Hello world');
+      const modal = modalator.default.buildModal('Hello world');
       modal.show();
     </script>
     ```
@@ -54,7 +55,7 @@ There are a few ways to call the Modal as follows:
 1.  Body only
 
 ```javascript
-var modal = new Modal('Hello world');
+const modal = modalator.buildModal('Heelllo world');
 ```
 
 This is the simplest method of calling the Modal as it is just to pass the main content and that will appear in the modal window. See the screenshot below.
@@ -66,7 +67,7 @@ There will be one close button and one close icon that will hide the modal windo
 2.  Header and body
 
 ```javascript
-var modal = new Modal('Hi','Hello world');
+const modal = modalator.buildModal('Hi','Hello world');
 ```
 
 This is another simple method of calling modal by just passing the modal title and content to display. See the screenshot below.
@@ -76,7 +77,7 @@ This is another simple method of calling modal by just passing the modal title a
 3.  Header, body and button
 
 ```javascript
-var modal = new Modal('Hi','Hello world','close');
+const modal = modalator.buildModal('Hi','Hello world','Close it');
 ```
 
 This is another simple method of calling the modal by passing modal title, content, and close button text. Here we can over the ride the text of close button if necessary.
@@ -86,7 +87,7 @@ This is another simple method of calling the modal by passing modal title, conte
 4.  Full customisation
 
 ```javascript
-var modal = new Modal(config);
+const modal = modalator.buildModal(config);
 ```
 
 To create a fully customised modal with specific colors, styles, renderers and callback functions. Example in screenshot below.
@@ -96,107 +97,76 @@ To create a fully customised modal with specific colors, styles, renderers and c
 A config object must be passed to the Modal to customise it. Here is the sample object passed to the Modal function.
 
 ```javascript
-let config = {
-  background: {      
-    style: function () {
-      let properties = {
-        'background':'#ccc',
-        'opacity':'0.7'
-      }
-      return properties;
-    }      
-  },
-  dialog: {
-    style: function () {
-      let properties = {
-        //"background":"#FFD2D2"						
-      }
-      return properties;
-    },
-    header:{
-      title: {
-        text: function () {
-           let div = document.createElement('div');
-           div.innerHTML = 'I am a title';
-           return div;   
-         },
-        style: function () {
-          let properties = {
-            'color': 'black'
-          }
-          return properties;
-        }
-      },
-      close_icon: {          
-        style: function () {
-          let properties = {
-            'color': 'rgb(255,0,0)'
-          }
-          return properties;
-        }
-      },    
-      style: function () {
-        let properties = {
-          'border-bottom': 'solid 1px #dadce0'
-        }
-        return properties;
-      }
-    },
-    body:{
-      content: {
-        text: function () {
-           let div = document.createElement('div');
-           div.innerHTML = 'I am a body';
-            //let div = "heelo"
-           return div;   
-         },
-         style: function () {
-          let properties = {
-            'color': 'black'
-          }
-          return properties;            
-        }            
-      }
-    },
-    footer:{          
-      style: function () {
-        let properties = {
-          'border-top': 'solid 1px #dadce0'
-        }
-        return properties;  
-      },
-      buttons:{
-        button_one:{
-          text: 'Close',
-          style: function () {
-            let properties = {       
-              'background-color': '#5a6268'
+const config = [{
+  name: 'modal',
+  child: [{
+    name: 'overlay',
+    style: 'opacity: 0.1; background-color: red;'
+  }, {
+    name: 'dialog',
+    child: [{
+      name: 'dialog_header',
+      child: [{
+        name: 'dialog_header_title',
+        element: {
+          value: function () {
+            let div = document.createElement('div');
+            div.innerHTML = 'Upload Files';
+            div.onclick = function () {
+              alert('hello');
             }
-            return properties;
-          },
-          run: function(event){              
-            event.hide();              
+            return div;   
           }
-        },
-        button_two:{
-        text: 'Save Changes',
+        }
+      }]
+    }, {
+      name: 'dialog_body',
+      element: {
+        value: function () {
+          let d = document.createElement('div');
+          d.innerHTML = 'Hello World';
+          return d;
+        }
+      }
+    }, {
+      name: 'dialog_footer',
+      child: [{
+        name: 'dialog_footer_child',
+        child: [{
+          name: 'dialog_footer_button_two',
           style: function () {
             let properties = {
               'background-color': '#007bff'
             }
             return properties;
-          },
-          run: function(){
-            alert('ashok');
           }
-        }
-      }        
-    }
-  }
-}
+        }, {
+          name: 'dialog_footer_button_one',
+          element: {
+            content: 'hello'
+          },
+          style: function () {
+            let properties = {       
+              'background-color': '#5a6268'
+            }
+            return properties;
+          }
+        }]
+      }]
+    }]
+  }]
+}];
+```
+
+For a full list of properties that can be specified on the modal please refer to the componator npm package.
+
+```
+https://www.npmjs.com/package/componator
 ```
 
 ### Contributors
+
+#### Develop
 
 If you would like to contribute to the project. To get a development environment up and running on your local system. Simply follow the instructions below.
 
@@ -218,10 +188,10 @@ git clone https://github.com/Joshua-W-Adams/modalator
 npm install
 ```
 
-4. Run Gulp task runner
+4. Serve module with web server
 
 ```
-gulp
+gulp serve
 ```
 
 5. Sample module can now be accessed on localhost
@@ -229,6 +199,22 @@ gulp
 ```
 http://localhost/
 ```
+
+#### Deployment
+
+1. Lint application
+
+```
+gulp lint
+```
+
+2. Build dist files
+
+```
+gulp build
+```
+
+3. Submit pull request to master branch on repository
 
 ## License
 Copyright (C) 2020 Joshua Adams

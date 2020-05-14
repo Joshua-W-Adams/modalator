@@ -14,125 +14,89 @@
 -->
 <!-- <script type="text/javascript" src="/dist/modalator.min.js"></script>
 <script>
-  var modal = new modalator.Modal('Hello world');
+  var modal = modalator.default.buildModal('Hello world');
   modal.show();
 </script> -->
 <!-- 
   Sample code for calling modalator with ECMA6 syntax
 -->
 <script type="module">
-import { Modal } from "./src/js/modalator.js"
-  
-  let config = {
-    background: {      
-      style: function () {
-        let properties = {
-          'background':'#ccc',
-          'opacity':'0.7'
-        }
-        return properties;
-      }      
-    },
-    dialog: {
-      style: function () {
-        let properties = {
-          //"background":"#FFD2D2"						
-        }
-        return properties;
-      },
-      header:{
-        title: {
-          text: function () {
-             let div = document.createElement('div');
-             div.innerHTML = 'I am a title';
-             div.onclick = function () {
-               alert('hello');
-             }
-             return div;   
-           },
-          style: function () {
-            let properties = {
-              'color': 'black'
-            }
-            return properties;
-          }
-        },
-        close_icon: {          
-          style: function () {
-            let properties = {
-              'color': 'rgb(255,0,0)'
-            }
-            return properties;
-          }
-        },    
-        style: function () {
-          let properties = {
-            'border-bottom': 'solid 1px #dadce0' 
-          }
-          return properties;
-        }
-      },
-      body:{
-        content: {
-			    text: function () {
-             let div = document.createElement('div');
-             div.innerHTML = 'I am a body';
-             div.onclick = function () {
-               alert('hello');
-             }
-			        //let div = "heelo"
-             return div;   
-           },
-		       style: function () {
-            let properties = {
-              'color': 'black'
-            }
-            return properties;            
-          }            
-        }
-      },
-      footer:{          
-        style: function () {
-          let properties = {
-            'border-top': 'solid 1px #dadce0' 
-          }
-          return properties;  
-        },
-        buttons:{
-          button_one:{
-            text: 'Close',
-            style: function () {
-              let properties = {       
-                'background-color': '#5a6268'
+
+  import modalator from "./src/js/modalator.js"
+
+  // define configuration options for modal
+  // these will override the default configuration model
+  const config = [{
+    name: 'modal',
+    child: [{
+      name: 'overlay',
+      style: 'opacity: 0.1; background-color: red;'
+    }, {
+      name: 'dialog',
+      child: [{
+        name: 'dialog_header',
+        child: [{
+          name: 'dialog_header_title',
+          element: {
+            value: function () {
+              let div = document.createElement('div');
+              div.innerHTML = 'Upload Files';
+              div.onclick = function () {
+                alert('hello');
               }
-              return properties;
-            },
-            run: function(event){              
-              event.hide();              
+              return div;   
             }
-          },
-          button_two:{
-          text: 'Save Changes',
+          }
+        }]
+      }, {
+        name: 'dialog_body',
+        element: {
+          value: function () {
+            let d = document.createElement('div');
+            d.innerHTML = 'Hello World';
+            return d;
+          }
+        }
+      }, {
+        name: 'dialog_footer',
+        child: [{
+          name: 'dialog_footer_child',
+          child: [{
+            name: 'dialog_footer_button_two',
             style: function () {
               let properties = {
                 'background-color': '#007bff'
               }
               return properties;
-            },
-            run: function(){
-              alert('ashok');
             }
-          }
-        }        
-      }
-    } 
-  }
-   
-  window.modal = new Modal(config);
-  // window.modal = new Modal('Heelllo world');
-  // window.modal = new Modal('Hi','Hello world');
-  // window.modal = new Modal('Hi','Hello world','Close it');
+          }, {
+            name: 'dialog_footer_button_one',
+            element: {
+              content: 'hello'
+            },
+            style: function () {
+              let properties = {       
+                'background-color': '#5a6268'
+              }
+              return properties;
+            }
+          }]
+        }]
+      }]
+    }]
+  }];
 
-  window.modal.show();
+  // Test cases for modal
+  const modal = modalator.buildModal();
+  // const modal = modalator.buildModal([]);
+  // const modal = modalator.buildModal(config);
+  // const modal = modalator.buildModal('Heelllo world');
+  // const modal = modalator.buildModal('Hi','Hello world');
+  // const modal = modalator.buildModal('Hi','Hello world','Close it');
+
+  console.log(modal);
+
+  // display modal to user
+  modal.show();
 
 </script>

@@ -107,71 +107,211 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 // N/A
 
 /* ============================= Private Methods ============================ */
-// TO DO - Replace individual loops for settings styles and applying user passed
-// renderers with generic style application functions.
-// function _applyStyles(elementStyle, styles) {
-//   // get keys to avoid looping through entire prototype chain
-//   const arr = Object.keys(styles);
-//   for (let i = 0; i < arr.length; i++) {
-//     const style = arr[i];
-//     elementStyle.cssText = elementStyle.cssText.concat(`${style} : ${styles[style]};`);
-//   }
-// }
-// function _applyStyleRenderer(elementStyle, styles, modal, prop) {
-//   if (!(typeof modal.isDefined(styles, prop) === 'undefined')) {
-//     _applyStyles(elementStyle, styles[prop].style());
-//   }
-// }
+function _applyStyles(elementStyle, styles) {
+  if (styles) {
+    // get keys to avoid looping through entire prototype chain
+    var arr = Object.keys(styles);
 
+    for (var i = 0; i < arr.length; i++) {
+      var style = arr[i];
+      elementStyle.cssText = elementStyle.cssText.concat("".concat(style, " : ").concat(styles[style], ";"));
+    }
+  }
+}
+
+function _preventDefault(event) {
+  event.preventDefault();
+}
+
+function _checkForFunction(prop) {
+  // string value or no property passed
+  if (typeof prop === 'function') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function _isElement(element) {
+  return element instanceof Element || element instanceof HTMLDocument;
+}
+
+function _getDescendantProp(obj, desc) {
+  var arr = desc.split('.');
+
+  while (arr.length && (obj = obj[arr.shift()])) {
+    ;
+  } // eslint-disable-line no-cond-assign
+
+
+  return obj;
+}
+
+function _createDescendantProp(obj, desc, value) {
+  var arr = desc.split('.');
+  var currentProp;
+  var currentObj = obj;
+
+  for (var i = 0; i < arr.length; i++) {
+    currentProp = arr[i]; // create property
+
+    if (i === arr.length - 1) {
+      currentObj[currentProp] = value;
+    } else if (!currentObj[currentProp]) {
+      currentObj[currentProp] = {};
+    } // set current object in loop
+
+
+    currentObj = currentObj[currentProp];
+  }
+
+  return obj;
+}
+
+function _handleUserConfigProperty(_this, propertyName, defaultElementName) {
+  var prop = _getDescendantProp(_this, propertyName); // case 1 - user passes function that returns html element
+
+
+  if (typeof prop !== 'undefined' && _checkForFunction(prop) && _isElement(prop())) {
+    // html element
+    return prop(); // case 2 - user passes string, nothing or unsupported type
+  } else {
+    // default element
+    return document.createElement(defaultElementName);
+  }
+}
+
+function _handleUserConfigStyle(_this, propertyName) {
+  var prop = _getDescendantProp(_this, propertyName); // case 1 - user passes function that returns an object with keys
+
+
+  if (typeof prop !== 'undefined' && _checkForFunction(prop) && _typeof(prop()) === 'object' && prop() !== null && Object.keys(prop()).length > 0) {
+    return prop(); // case 2 - user passes style string
+  } else if (typeof prop === 'string') {// convert string to style object
+    // case 3 - nothing or unsupported type
+  } else {
+    return null;
+  }
+}
+
+function _handleUserConfigRun(_this, propertyName, callback) {
+  var prop = _getDescendantProp(_this, propertyName); // case 1 - user passes function
+
+
+  if (typeof prop !== 'undefined' && _checkForFunction(prop)) {
+    return prop; // case 2 - user passes string, nothing or unsupported type
+  } else {
+    return callback;
+  }
+}
+
+function _checkUserInputForString(prop, defaultString) {
+  // case 1 - user passes string
+  if (typeof prop === 'string') {
+    return prop; // case 2 - user passes function that returns string
+  } else if (_checkForFunction(prop) && typeof prop() === 'string') {
+    return prop(); // case 3 - user passes function that returns html element
+  } else if (_checkForFunction(prop) && _isElement(prop())) {
+    return ''; // case 4 - user pases nothing or unsupported type
+  } else {
+    return defaultString || '';
+  }
+}
+
+function _appendUserStringInput(prop, element, defaultString) {
+  // get string value to append to element
+  var str = _checkUserInputForString(prop, defaultString); // append string value to element
+
+
+  element.append(str);
+}
+
+function _findElement(arr, propName, propValue) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i][propName] === propValue) {
+      return arr[i];
+    }
+  } // will return undefined if not found; you could return a default instead
+
+}
 /* ============================== Public Methods ============================ */
 // Modal window starts here
 // Object initialization and return the instance as an object
+
+
 var Modal = function Modal(config, dialog_body, dialog_button) {
   var _this = this;
 
-  _this.config = config;
-  _this.dialog_title = '';
-  _this.dialog_body = '';
-  _this.dialog_button = '';
+  _this.config = config; // define internal functions
 
-  if (_typeof(config) === 'object') {
-    _this.dialog_title = _this.config.dialog.header.title.text();
-    _this.dialog_body = _this.config.dialog.body.content.text();
-    _this.dialog_button_one = _this.config.dialog.footer.buttons.button_one.text;
-
-    if (!(typeof _this.isDefined(_this.config, 'dialog.footer.buttons.button_two.text') === 'undefined')) {
-      _this.dialog_button_two = _this.config.dialog.footer.buttons.button_two.text;
+  function _addOnClick(element, cb) {
+    if (cb) {
+      element.onclick = function () {
+        cb(_this);
+      };
     }
-  } else if (typeof config === 'string') {
+  }
+
+  function _addOnHover(element, prop) {
+    var color = element.style[prop];
+
+    element.onmouseover = function () {
+      element.style[prop] = _this.adjust_brightness(_this.getRGBCode(color, _this), 16);
+    };
+
+    element.onmouseout = function () {
+      element.style[prop] = element.getAttribute('data-color');
+    };
+  } // handle non object user config cases
+
+
+  if (_typeof(config) !== 'object') {
+    // create config object to store string values
+    var cnf = {}; // set generic config details
+
+    _createDescendantProp(cnf, 'dialog.footer.buttons.button_one.text', 'Close');
+
+    _createDescendantProp(cnf, 'dialog.footer.buttons.button_two.style', function () {
+      var properties = {
+        'display': 'none'
+      };
+      return properties;
+    }); // case 1 - one parameter passed - modal body
+
+
     if (typeof dialog_body === 'undefined' && typeof dialog_button === 'undefined') {
-      _this.dialog_body = _this.config;
-      _this.dialog_button_one = 'close';
+      _createDescendantProp(cnf, 'dialog.body.text', _this.config); // case 2 - two parameters passed - modal header and body
+
     } else if (typeof dialog_button === 'undefined') {
-      _this.dialog_title = _this.config;
-      _this.dialog_body = dialog_body;
-      _this.dialog_button_one = 'close';
+      _createDescendantProp(cnf, 'dialog.header.title.text', _this.config);
+
+      _createDescendantProp(cnf, 'dialog.body.text', dialog_body); // case 3 - three parameters passed - modal header, body and button name
+
     } else {
-      _this.dialog_title = _this.config;
-      _this.dialog_body = dialog_body;
-      _this.dialog_button_one = dialog_button;
-    }
-  } // Modal Object initialization and declaration
+      _createDescendantProp(cnf, 'dialog.header.title.text', _this.config);
+
+      _createDescendantProp(cnf, 'dialog.body.text', dialog_body);
+
+      _createDescendantProp(cnf, 'dialog.footer.buttons.button_one.text', dialog_button);
+    } // set config object of modal as created object
 
 
-  var data = {
-    modal: document.createElement('div'),
-    overlay: document.createElement('div'),
-    dialog: document.createElement('div'),
-    dialog_header: document.createElement('div'),
-    dialog_header_title: document.createElement('span'),
-    dialog_header_close_icon: document.createElement('span'),
-    dialog_body: document.createElement('div'),
-    dialog_footer: document.createElement('div'),
-    dialog_footer_child: document.createElement('div'),
-    dialog_footer_last_child: document.createElement('div'),
-    dialog_footer_button_one: document.createElement('button'),
-    dialog_footer_button_two: document.createElement('button'),
-    overlay_style: {
+    _this.config = cnf;
+  }
+
+  var data = [{
+    // user cannot pass modal configuration details
+    name: 'modal',
+    element: document.createElement('div'),
+    onclick: null,
+    userStyle: null,
+    defaultStyle: null
+  }, {
+    name: 'overlay',
+    element: _handleUserConfigProperty(_this, 'config.background.text', 'div'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.background.style'),
+    defaultStyle: {
       'position': 'fixed',
       'top': '0px',
       'left': '0px',
@@ -181,8 +321,13 @@ var Modal = function Modal(config, dialog_body, dialog_button) {
       'background': '#000',
       'opacity': '0.7',
       'z-index': '999'
-    },
-    dialog_style: {
+    }
+  }, {
+    name: 'dialog',
+    element: _handleUserConfigProperty(_this, 'config.dialog.text', 'div'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.style'),
+    defaultStyle: {
       'position': 'absolute',
       'top': '-1000px',
       'min-width': '500px',
@@ -193,50 +338,94 @@ var Modal = function Modal(config, dialog_body, dialog_button) {
       'background': '#fff',
       'display': 'block',
       'z-index': '9999'
-    },
-    dialog_header_style: {
-      'padding': '30px 20px',
+    }
+  }, {
+    name: 'dialog_header',
+    element: _handleUserConfigProperty(_this, 'config.dialog.header.text', 'div'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.header.style'),
+    defaultStyle: {
+      'padding': '20px',
       'border-bottom': '1px solid #e9ecef'
-    },
-    dialog_header_title_style: {
+    }
+  }, {
+    name: 'dialog_header_title',
+    element: _handleUserConfigProperty(_this, 'config.dialog.header.title.text', 'div'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.header.title.style'),
+    defaultStyle: {
       'font-weight': '500',
       'color': '#212529',
       'font-size': '20px',
-      'float': 'left'
-    },
-    dialog_header_close_icon_style: {
-      'position': 'absolute',
-      'top': '0px',
-      'right': '0px',
-      'padding': '4px 12px',
+      'display': 'inline-block'
+    }
+  }, {
+    name: 'dialog_header_close_icon',
+    element: _handleUserConfigProperty(_this, 'config.dialog.header.close_icon.text', 'span'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.header.close_icon.style'),
+    defaultStyle: {
+      'padding': '0px 5px',
       'color': '#C5C5C5',
       'font-size': '20px',
       'font-weight': '700',
-      'cursor': 'pointer'
-    },
-    dialog_body_style: {
+      'cursor': 'pointer',
+      'float': 'right'
+    }
+  }, {
+    name: 'dialog_body',
+    element: _handleUserConfigProperty(_this, 'config.dialog.body.text', 'div'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.body.style'),
+    defaultStyle: {
       'padding': '30px 20px',
       'min-height': '300px'
-    },
-    dialog_footer_style: {
+    }
+  }, {
+    name: 'dialog_footer',
+    element: _handleUserConfigProperty(_this, 'config.dialog.footer.text', 'form'),
+    onclick: null,
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.footer.style'),
+    defaultStyle: {
       'border-top': '1px solid #e9ecef',
       'padding': '30px 20px'
-    },
-    dialog_footer_child_style: {
+    }
+  }, {
+    name: 'dialog_footer_child',
+    element: document.createElement('div'),
+    onclick: null,
+    userStyle: null,
+    defaultStyle: {
       'float': 'right'
-    },
-    dialog_footer_last_child_style: {
+    }
+  }, {
+    name: 'dialog_footer_last_child',
+    element: document.createElement('div'),
+    onclick: null,
+    userStyle: null,
+    defaultStyle: {
       'clear': 'both'
-    },
-    dialog_footer_button_one_style: {
+    }
+  }, {
+    name: 'dialog_footer_button_one',
+    element: _handleUserConfigProperty(_this, 'config.dialog.footer.buttons.button_one.text', 'button'),
+    // https://stackoverflow.com/questions/4011793/this-is-undefined-in-javascript-class-methods
+    onclick: _handleUserConfigRun(_this, 'config.dialog.footer.buttons.button_one.run', this.hide.bind(this)),
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.footer.buttons.button_one.style'),
+    defaultStyle: {
       'border-radius': '3px',
       'padding': '15px 30px',
       'background': 'red',
       'border': 'none',
       'color': '#fff',
       'cursor': 'pointer'
-    },
-    dialog_footer_button_two_style: {
+    }
+  }, {
+    name: 'dialog_footer_button_two',
+    element: _handleUserConfigProperty(_this, 'config.dialog.footer.buttons.button_two.text', 'button'),
+    onclick: _handleUserConfigRun(_this, 'config.dialog.footer.buttons.button_two.run', this.hide.bind(this)),
+    userStyle: _handleUserConfigStyle(_this, 'config.dialog.footer.buttons.button_two.style'),
+    defaultStyle: {
       'border-radius': '3px',
       'padding': '15px 20px',
       'background': '#007bff',
@@ -245,205 +434,129 @@ var Modal = function Modal(config, dialog_body, dialog_button) {
       'cursor': 'pointer',
       'margin-right': '15px'
     }
-  };
-  data.dialog.setAttribute('id', 'democlass'); // for loop for adding style object to the overlay
-  // TO DO - Sample code for application of styles and user passed renders with generic loop.
-  // const arr = [{
-  //   elementStyle: data.overlay.style,
-  //   styles: data.overlay_style,
-  //   prop: 'background'
-  // }, {
-  //   elementStyle: data.dialog.style,
-  //   styles: data.dialog_style,
-  //   prop: 'dialog'
-  // }];
-  // // apply styles to all elements
-  // for (let i = 0; i < arr.length; i++) {
-  //   const elementStyle = arr[i].elementStyle;
-  //   const styles = arr[i].styles;
-  //   const prop = arr[i].prop;
-  //   // apply default styles
-  //   _applyStyles(elementStyle, styles);
-  //   // apply user specified style renderer
-  //   _applyStyleRenderer(elementStyle, _this.config, this, prop);
-  // }
+  }]; // prevent form refreshing the page
 
-  for (var style in data.overlay_style) {
-    data.overlay.style.cssText = data.overlay.style.cssText.concat(style + ' : ' + data.overlay_style[style] + ';');
-  }
-
-  if (!(typeof this.isDefined(_this.config, 'background') === 'undefined')) {
-    for (var _style in _this.config.background.style()) {
-      data.overlay.style.cssText = data.overlay.style.cssText.concat(_style + ' : ' + _this.config.background.style()[_style] + ';');
-    }
-  } // for loop for adding style object to the dialog
+  _findElement(data, 'name', 'dialog_footer').element.addEventListener('submit', _preventDefault); // apply styles and onclick functionality to all elements
 
 
-  for (var _style2 in data.dialog_style) {
-    data.dialog.style.cssText = data.dialog.style.cssText.concat(_style2 + ' : ' + data.dialog_style[_style2] + ';');
-  }
+  for (var i = 0; i < data.length; i++) {
+    var elementConfig = data[i];
+    var element = elementConfig.element;
+    var onclick = elementConfig.onclick;
+    var elementStyle = element.style;
+    var defaultStyle = elementConfig.defaultStyle;
+    var userStyle = elementConfig.userStyle; // apply default styles
 
-  if (!(typeof this.isDefined(_this.config, 'dialog') === 'undefined')) {
-    for (var _style3 in _this.config.dialog.style()) {
-      data.dialog.style.cssText = data.dialog.style.cssText.concat(_style3 + ' : ' + _this.config.dialog.style()[_style3] + ';');
-    }
-  } // for loop for adding style object to the dialog header
-
-
-  for (var _style4 in data.dialog_header_style) {
-    data.dialog_header.style.cssText = data.dialog_header.style.cssText.concat(_style4 + ' : ' + data.dialog_header_style[_style4] + ';');
-  }
-
-  if (!(typeof this.isDefined(_this.config, 'dialog.header') === 'undefined')) {
-    for (var _style5 in _this.config.dialog.header.style()) {
-      data.dialog_header.style.cssText = data.dialog_header.style.cssText.concat(_style5 + ' : ' + _this.config.dialog.header.style()[_style5] + ';');
-    }
-  } // for loop for adding style object to the dialog header text
+    _applyStyles(elementStyle, defaultStyle); // apply user specified style renderer
 
 
-  for (var _style6 in data.dialog_header_title_style) {
-    data.dialog_header_title.style.cssText = data.dialog_header_title.style.cssText.concat(_style6 + ' : ' + data.dialog_header_title_style[_style6] + ';');
-  }
-
-  if (!(typeof this.isDefined(_this.config, 'dialog.header.title') === 'undefined')) {
-    for (var _style7 in _this.config.dialog.header.title.style()) {
-      data.dialog_header_title.style.cssText = data.dialog_header_title.style.cssText.concat(_style7 + ' : ' + _this.config.dialog.header.title.style()[_style7] + ';');
-    }
-  } // for loop for adding style object to the dialog header text
+    _applyStyles(elementStyle, userStyle); // add onclick / run functions to all elements
 
 
-  for (var _style8 in data.dialog_header_close_icon_style) {
-    data.dialog_header_close_icon.style.cssText = data.dialog_header_close_icon.style.cssText.concat(_style8 + ' : ' + data.dialog_header_close_icon_style[_style8] + ';');
-  }
-
-  if (!(typeof this.isDefined(_this.config, 'dialog.header.close_icon') === 'undefined')) {
-    for (var _style9 in _this.config.dialog.header.close_icon.style()) {
-      data.dialog_header_close_icon.style.cssText = data.dialog_header_close_icon.style.cssText.concat(_style9 + ' : ' + _this.config.dialog.header.close_icon.style()[_style9] + ';');
-    }
-  } // for loop for adding style object to the dialog header text
-  // code to make the hover function over close x button
+    _addOnClick(element, onclick);
+  } // Add on hover functionality
 
 
-  data.dialog_header_close_icon.setAttribute('data-color', data.dialog_header_close_icon.style.color);
+  var test_dialog_header_close_icon = _findElement(data, 'name', 'dialog_header_close_icon').element;
 
-  data.dialog_header_close_icon.onmouseover = function () {
-    data.dialog_header_close_icon.style.color = _this.adjust_brightness(_this.getRGBCode(data.dialog_header_close_icon.style.color, _this), 16);
-  };
+  test_dialog_header_close_icon.setAttribute('data-color', test_dialog_header_close_icon.style.color);
 
-  data.dialog_header_close_icon.onmouseout = function () {
-    data.dialog_header_close_icon.style.color = data.dialog_header_close_icon.getAttribute('data-color');
-  }; // code to make the hover function over close x button
+  _addOnHover(_findElement(data, 'name', 'dialog_header_close_icon').element, 'color');
 
+  var test_dialog_footer_button_one = _findElement(data, 'name', 'dialog_footer_button_one').element;
 
-  for (var _style10 in data.dialog_body_style) {
-    data.dialog_body.style.cssText = data.dialog_body.style.cssText.concat(_style10 + ' : ' + data.dialog_body_style[_style10] + ';');
-  }
+  test_dialog_footer_button_one.setAttribute('data-color', test_dialog_footer_button_one.style.background);
 
-  if (!(typeof this.isDefined(_this.config, 'dialog.body.content') === 'undefined')) {
-    for (var _style11 in _this.config.dialog.body.content.style()) {
-      data.dialog_body.style.cssText = data.dialog_body.style.cssText.concat(_style11 + ' : ' + _this.config.dialog.body.content.style()[_style11] + ';');
-    }
-  } // for loop for adding style object to the dialog header text
+  _addOnHover(_findElement(data, 'name', 'dialog_footer_button_one').element, 'background');
 
+  var test_dialog_footer_button_two = _findElement(data, 'name', 'dialog_footer_button_two').element;
 
-  for (var _style12 in data.dialog_footer_style) {
-    data.dialog_footer.style.cssText = data.dialog_footer.style.cssText.concat(_style12 + ' : ' + data.dialog_footer_style[_style12] + ';');
-  }
+  test_dialog_footer_button_two.setAttribute('data-color', test_dialog_footer_button_two.style.background);
 
-  if (!(typeof this.isDefined(_this.config, 'dialog.footer') === 'undefined')) {
-    for (var _style13 in _this.config.dialog.footer.style()) {
-      data.dialog_footer.style.cssText = data.dialog_footer.style.cssText.concat(_style13 + ' : ' + _this.config.dialog.footer.style()[_style13] + ';');
-    }
-  } // for loop for adding style object to the dialog header text
+  _addOnHover(_findElement(data, 'name', 'dialog_footer_button_two').element, 'background');
+  /* ============================== Assign User Content to Elements ============================ */
+  // All elements have had their default styles applied c/w overrides from user
 
 
-  for (var _style14 in data.dialog_footer_child_style) {
-    data.dialog_footer_child.style.cssText = data.dialog_footer_child.style.cssText.concat(_style14 + ' : ' + data.dialog_footer_child_style[_style14] + ';');
-  } // for loop for adding style object to the dialog header text
+  var bgText = _getDescendantProp(_this, 'config.background.text');
+
+  var dialogText = _getDescendantProp(_this, 'config.dialog.text');
+
+  var headerText = _getDescendantProp(_this, 'config.dialog.header.text');
+
+  var hTitleText = _getDescendantProp(_this, 'config.dialog.header.title.text');
+
+  var hCloseIconText = _getDescendantProp(_this, 'config.dialog.header.close_icon.text');
+
+  var bodyText = _getDescendantProp(_this, 'config.dialog.body.text');
+
+  var footerText = _getDescendantProp(_this, 'config.dialog.footer.text');
+
+  var buttonOneText = _getDescendantProp(_this, 'config.dialog.footer.buttons.button_one.text');
+
+  var buttonTwoText = _getDescendantProp(_this, 'config.dialog.footer.buttons.button_two.text'); // apply user specified content or fall back to passed default
+  // background
 
 
-  for (var _style15 in data.dialog_footer_last_child_style) {
-    data.dialog_footer_last_child.style.cssText = data.dialog_footer_last_child.style.cssText.concat(_style15 + ' : ' + data.dialog_footer_last_child_style[_style15] + ';');
-  } // for loop for adding style object to the dialog header text
+  _appendUserStringInput(bgText, _findElement(data, 'name', 'overlay').element); // general dialog config
 
 
-  for (var _style16 in data.dialog_footer_button_one_style) {
-    data.dialog_footer_button_one.style.cssText = data.dialog_footer_button_one.style.cssText.concat(_style16 + ' : ' + data.dialog_footer_button_one_style[_style16] + ';');
-  }
-
-  if (!(typeof this.isDefined(_this.config, 'dialog.footer.buttons.button_one') === 'undefined')) {
-    for (var _style17 in _this.config.dialog.footer.buttons.button_one.style()) {
-      data.dialog_footer_button_one.style.cssText = data.dialog_footer_button_one.style.cssText.concat(_style17 + ' : ' + _this.config.dialog.footer.buttons.button_one.style()[_style17] + ';');
-    }
-  } // code to make the hover function
+  _appendUserStringInput(dialogText, _findElement(data, 'name', 'dialog').element); // dialog header config
 
 
-  data.dialog_footer_button_one.setAttribute('data-background', data.dialog_footer_button_one.style.background);
+  _appendUserStringInput(headerText, _findElement(data, 'name', 'dialog_header').element);
 
-  data.dialog_footer_button_one.onmouseover = function () {
-    data.dialog_footer_button_one.style.background = _this.adjust_brightness(_this.getRGBCode(data.dialog_footer_button_one.style.background, _this), 16);
-  };
+  _appendUserStringInput(hTitleText, _findElement(data, 'name', 'dialog_header_title').element);
 
-  data.dialog_footer_button_one.onmouseout = function () {
-    data.dialog_footer_button_one.style.background = data.dialog_footer_button_one.getAttribute('data-background');
-  }; // end of code to make the hover function
+  _appendUserStringInput(hCloseIconText, _findElement(data, 'name', 'dialog_header_close_icon').element, 'X'); // dialog body config
 
 
-  if (!(typeof this.isDefined(_this.config, 'dialog.footer.buttons.button_two.text') === 'undefined')) {
-    // for loop for adding style object to the dialog header text
-    for (var _style18 in data.dialog_footer_button_two_style) {
-      data.dialog_footer_button_two.style.cssText = data.dialog_footer_button_two.style.cssText.concat(_style18 + ' : ' + data.dialog_footer_button_two_style[_style18] + ';');
-    }
-
-    for (var _style19 in _this.config.dialog.footer.buttons.button_two.style()) {
-      data.dialog_footer_button_two.style.cssText = data.dialog_footer_button_two.style.cssText.concat(_style19 + ' : ' + _this.config.dialog.footer.buttons.button_two.style()[_style19] + ';');
-    }
-
-    data.dialog_footer_button_two.innerHTML = _this.dialog_button_two; // code to make the hover function
-
-    data.dialog_footer_button_two.setAttribute('data-background', data.dialog_footer_button_two.style.background);
-
-    data.dialog_footer_button_two.onmouseover = function () {
-      data.dialog_footer_button_two.style.background = _this.adjust_brightness(_this.getRGBCode(data.dialog_footer_button_two.style.background, _this), 16);
-    };
-
-    data.dialog_footer_button_two.onmouseout = function () {
-      data.dialog_footer_button_two.style.background = data.dialog_footer_button_two.getAttribute('data-background');
-    }; // end of code to make the hover function
+  _appendUserStringInput(bodyText, _findElement(data, 'name', 'dialog_body').element); // dialog footer config
 
 
-    data.dialog_footer_button_two.onclick = function () {
-      _this.config.dialog.footer.buttons.button_two.run();
-    };
+  _appendUserStringInput(footerText, _findElement(data, 'name', 'dialog_footer').element);
 
-    data.dialog_footer_child.append(data.dialog_footer_button_two);
-  } // default styled element c/w overrides from user + passed content appended
+  _appendUserStringInput(buttonOneText, _findElement(data, 'name', 'dialog_footer_button_one').element);
 
-
-  data.dialog_header_title.append(_this.dialog_title);
-  data.dialog_body.append(_this.dialog_body);
-  data.dialog_footer_button_one.innerHTML = _this.dialog_button_one;
-  data.dialog_header_close_icon.innerHTML = 'x'; // data.dialog_footer_button_one.onclick = _this.config.dialog.footer.buttons.button_one.run();
-
-  data.dialog_footer_button_one.onclick = function () {
-    if (!(typeof _this.isDefined(_this.config, 'dialog.footer.buttons.button_one') === 'undefined')) {
-      _this.config.dialog.footer.buttons.button_one.run(_this);
-    } else {
-      _this.hide();
-    }
-  }; // appending black overlay to body
+  _appendUserStringInput(buttonTwoText, _findElement(data, 'name', 'dialog_footer_button_two').element); // build element tree
 
 
-  data.dialog_header.append(data.dialog_header_title);
-  data.dialog_header.append(data.dialog_header_close_icon);
-  data.dialog.append(data.dialog_header);
-  data.dialog.append(data.dialog_body);
-  data.dialog_footer_child.append(data.dialog_footer_button_one);
-  data.dialog_footer.append(data.dialog_footer_child);
-  data.dialog_footer.append(data.dialog_footer_last_child);
-  data.dialog.append(data.dialog_footer);
-  data.modal.append(data.overlay);
-  data.modal.append(data.dialog);
+  var dialog_header = _findElement(data, 'name', 'dialog_header').element;
+
+  var dialog_header_title = _findElement(data, 'name', 'dialog_header_title').element;
+
+  var dialog_header_close_icon = _findElement(data, 'name', 'dialog_header_close_icon').element;
+
+  var dialog = _findElement(data, 'name', 'dialog').element;
+
+  var temp_dialog_body = _findElement(data, 'name', 'dialog_body').element;
+
+  var dialog_footer_child = _findElement(data, 'name', 'dialog_footer_child').element;
+
+  var dialog_footer_button_one = _findElement(data, 'name', 'dialog_footer_button_one').element;
+
+  var dialog_footer_button_two = _findElement(data, 'name', 'dialog_footer_button_two').element;
+
+  var dialog_footer = _findElement(data, 'name', 'dialog_footer').element;
+
+  var dialog_footer_last_child = _findElement(data, 'name', 'dialog_footer_last_child').element;
+
+  var modal = _findElement(data, 'name', 'modal').element;
+
+  var overlay = _findElement(data, 'name', 'overlay').element;
+
+  dialog_header.append(dialog_header_title);
+  dialog_header.append(dialog_header_close_icon);
+  dialog.append(dialog_header);
+  dialog.append(temp_dialog_body);
+  dialog_footer_child.append(dialog_footer_button_two);
+  dialog_footer_child.append(dialog_footer_button_one);
+  dialog_footer.append(dialog_footer_child);
+  dialog_footer.append(dialog_footer_last_child);
+  dialog.append(dialog_footer);
+  modal.append(overlay);
+  modal.append(dialog); // save element tree to object
+
   this.data = data;
   return this;
 }; // Prototype to show the modal window
@@ -453,15 +566,22 @@ Modal.prototype.show = function () {
   // positioning modal to the left
   var _this = this;
 
-  document.body.append(_this.data.modal);
-  var top_position = (screen.availHeight - _this.data.dialog.offsetHeight) / 2;
-  top_position = top_position > 50 ? top_position : '50px';
-  _this.data.dialog.style.left = ((window.innerWidth - _this.data.dialog.offsetWidth) / 2).toString() + 'px';
-  _this.data.dialog.style.top = top_position.toString() + 'px';
-  _this.data.overlay.style.display = 'block';
-  _this.data.dialog.style.transition = 'all 0.5s';
+  document.body.append(_findElement(_this.data, 'name', 'modal').element);
 
-  _this.data.dialog_header_close_icon.onclick = function () {
+  var dialog = _findElement(_this.data, 'name', 'dialog').element;
+
+  var overlay = _findElement(_this.data, 'name', 'overlay').element;
+
+  var dialog_header_close_icon = _findElement(_this.data, 'name', 'dialog_header_close_icon').element;
+
+  var top_position = (screen.availHeight - dialog.offsetHeight) / 2;
+  top_position = top_position > 50 ? top_position : '50px';
+  dialog.style.left = ((window.innerWidth - dialog.offsetWidth) / 2).toString() + 'px';
+  dialog.style.top = top_position.toString() + 'px';
+  overlay.style.display = 'block';
+  dialog.style.transition = 'all 0.5s';
+
+  dialog_header_close_icon.onclick = function () {
     _this.hide();
   };
 }; // Prototype to hide the modal window and release the config object
@@ -470,8 +590,12 @@ Modal.prototype.show = function () {
 Modal.prototype.hide = function () {
   var _this = this;
 
-  _this.data.overlay.style.display = 'none';
-  _this.data.dialog.style.top = '-1000px';
+  var dialog = _findElement(_this.data, 'name', 'dialog').element;
+
+  var overlay = _findElement(_this.data, 'name', 'overlay').element;
+
+  overlay.style.display = 'none';
+  dialog.style.top = '-1000px';
 };
 
 Modal.prototype.isDefined = function isDefined(_this, key) {

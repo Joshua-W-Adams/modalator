@@ -95,7 +95,7 @@ function _getDefaultConfig(_this) {
           onmouseout: componator.defaultOnMouseOutColor,
           style: {
             padding: '0px 5px',
-            color: '#C5C5C5',
+            color: 'red',
             'font-size': '20px',
             'font-weight': '700',
             cursor: 'pointer',

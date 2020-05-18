@@ -195,7 +195,7 @@ function _getDefaultConfig(_this) {
           onmouseout: _node_modules_componator_src_js_componator__WEBPACK_IMPORTED_MODULE_0___default.a.defaultOnMouseOutColor,
           style: {
             padding: '0px 5px',
-            color: '#C5C5C5',
+            color: 'red',
             'font-size': '20px',
             'font-weight': '700',
             cursor: 'pointer',

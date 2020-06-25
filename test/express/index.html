@@ -6,7 +6,8 @@
     <meta charset="utf-8">
   </head>
   <body spellcheck="false">
-    <button id="hello" onclick="modal.show()"style="position:fixed;top:0px;left:0px;">show modal</button>
+    <button id="show">show</button>
+    <button id="remove">remove</button>
   </body>
 </html>
 <!-- 
@@ -101,5 +102,15 @@
 
   // display modal to user
   modal.show();
+
+  // add onlick functions to buttons
+  const show = document.getElementById("show");
+  const remove = document.getElementById("remove");
+  show.onclick = function () {
+    modal.show();
+  }
+  remove.onclick = function () {
+    modal.remove();
+  }
 
 </script>

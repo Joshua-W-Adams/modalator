@@ -270,9 +270,9 @@ function show() {
   dialog.style.transition = 'all 0.5s';
 }
 
-// hide the modal window and release the config object
+// hide the modal window
 function hide() {
-  // refer to object that contains the _show function as prototype
+  // refer to object that contains the _hide function as prototype
   const _this = this;
   // get elements
   const dialog = componator.findChildElement(_this.finalConfig, 'name', 'dialog').element;
@@ -282,11 +282,27 @@ function hide() {
   dialog.style.top = '-1000px';
 }
 
+// remove the modal from the dom and release the config object
+function remove() {
+  // refer to object that contains the _remove function as prototype
+  const _this = this;
+  // hide element so animations work correctly
+  _this.hide();
+  // remove DOM object
+  const e = _this.finalConfig[0].element;
+  e.parentElement.removeChild(e);
+  // clear modal from memory
+  // object is automatically removed by the garbage collector
+  // when there are no more references to the object
+  // therefore not required
+  // _this = null;
+}
+
 function buildModal(userConfig, dialog_body, dialog_button) {
   // create component
   const component = {};
   // get prototype functions to assign to component
-  const functions = [hide, show];
+  const functions = [hide, show, remove];
   // assign prototype functions so they can be reference in default config
   _addFunctions(component, functions);
   // default configuration modal of modal

@@ -7,11 +7,10 @@
 /* ============================== Import Modules ============================ */
 
 // module that handles generating gui components from passed data structure
-// / = relative to server location
+// / || null = relative to server location
 // ./ = relative to file location
-import componator from '/node_modules/componator/src/js/componator.js';
-// for webpack
-// import componator from '../../node_modules/componator/src/js/componator';
+// first / ommitted for webpack configuration
+import componator from '../../node_modules/componator/src/js/componator.js';
 
 /* ================================ Variables =============================== */
 

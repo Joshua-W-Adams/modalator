@@ -7,12 +7,9 @@
 /* ============================== Import Modules ============================ */
 
 // module that handles generating gui components from passed data structure
-// / || null = relative to server location
-// ./ = relative to file location
-// first / ommitted for webpack configuration
 // webpack will look for the componator package in the nodemodules directory
 // must have index.js file in node package for this to work correctly.
-import componator from 'componator';
+let componator = require('componator');
 
 /* ================================ Variables =============================== */
 
@@ -319,6 +316,6 @@ function buildModal(userConfig, dialog_body, dialog_button) {
 
 /* =========================== Export Public APIs =========================== */
 
-export {
+module.exports = {
   buildModal
 };

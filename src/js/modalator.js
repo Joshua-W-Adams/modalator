@@ -10,7 +10,9 @@
 // / || null = relative to server location
 // ./ = relative to file location
 // first / ommitted for webpack configuration
-import componator from '../../node_modules/componator/src/js/componator.js';
+// webpack will look for the componator package in the nodemodules directory
+// must have index.js file in node package for this to work correctly.
+import componator from 'componator';
 
 /* ================================ Variables =============================== */
 
@@ -317,6 +319,6 @@ function buildModal(userConfig, dialog_body, dialog_button) {
 
 /* =========================== Export Public APIs =========================== */
 
-export default {
+export {
   buildModal
 };

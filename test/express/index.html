@@ -10,20 +10,8 @@
     <button id="remove">remove</button>
   </body>
 </html>
-<!-- 
-  Sample code for calling modalator with ECMA5 syntax
--->
-<!-- <script type="text/javascript" src="/dist/modalator.full.js"></script>
-<script>
-  var modal = modalator.default.buildModal('Hello world');
-  modal.show();
-</script> -->
-<!-- 
-  Sample code for calling modalator with ECMA6 syntax
--->
+<script type="text/javascript" src="/dist/modalator.full.js"></script>
 <script type="module">
-
-  import modalator from "./src/js/modalator.js"
 
   // define configuration options for modal
   // these will override the default configuration model
@@ -90,6 +78,8 @@
     }]
   }];
 
+  console.log(modalator);
+  
   // Test cases for modal
   const modal = modalator.buildModal();
   // const modal = modalator.buildModal([]);

@@ -26,27 +26,15 @@ This modal is:
 npm i modalator --save
 ```
 
-2. Either import into a Javascript Module OR add as a resource.
+2. Add as a resource.
 
-    1. Import
-
-    ```javascript
-    <script type="module">
-      import modalator from './<location_of_modalator_installation>/modalator.js';
-      const modal = modalator.buildModal();
-      modal.show();
-    </script>
-    ```
-
-    2. Resource
-
-    ```javascript
-    <script type="text/javascript" src="/<location_of_modalator_installation>//dist/modalator.full.js"></script>
-    <script>
-      const modal = modalator.default.buildModal('Hello world');
-      modal.show();
-    </script>
-    ```
+  ```javascript
+  <script type="text/javascript" src="/<location_of_modalator_installation>/dist/modalator.full.min.js"></script>
+  <script>
+    const modal = modalator.default.buildModal('Hello world');
+    modal.show();
+  </script>
+  ```
 
 ### Useage
 

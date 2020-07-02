@@ -41,7 +41,7 @@
       // js code
       // "some-module-1": "someModule1",
       // "./dist/some-module-2.js": "someModule2"
-      "../../node_modules/componator/src/js/componator": "componator"
+      "componator": "componator"
     }
       // list of dependancies to ADD to the compiled css files
       , css: []   // 'dep1_location/dep1.css', 'etc.'
@@ -51,7 +51,7 @@
  
  const paths = {
    inputs: {
-     index: "./src/js/modalator.js"
+     index: "./index.js"
      , js: ["./src/js/**/*.js"]
      , sass: ["./src/sass/**/*.scss"]
    }
@@ -63,7 +63,8 @@
 function getNodemonServer () {
   const nodemonServer = nodemon({
     // Calls the index.js script in the root directory by default
-    // script: __dirname + '\\index.js'
+    // override with specific express script
+    script: __dirname + '\\test\\express\\express.js',
     // arguments to pass to server.js
     // args: [`development`]
     // specify file types to watch in dir specified below.
@@ -97,6 +98,8 @@ function getWebpackCnf (name) {
     output: {
       filename: "[name].js",
       libraryTarget: 'var',
+      // name of library that will be exported. This will be accessible as a global variable
+      // in the web application.
       library: pkg.name.replace('-', ''),
     },
     // exclude dependacies from the webpack output by listing them here
@@ -259,6 +262,8 @@ gulp.task('sasslint', function (done) {
 
 gulp.task('serve', function (done) {
    nodemonServer = getNodemonServer();
+   gulp.watch(paths.inputs.sass, gulp.series('css-no-dep', 'css-with-dep'));
+   gulp.watch(paths.inputs.js, gulp.series('js-no-dep', 'js-min-no-dep', 'js-with-dep', 'js-min-with-dep'));
 })
 
 gulp.task('lint', function (done) {

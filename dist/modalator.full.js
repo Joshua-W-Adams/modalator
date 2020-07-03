@@ -108,7 +108,7 @@ module.exports = __webpack_require__(2)("./".concat(pkg.name, ".js"));
 /* 1 */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"modalator\",\"version\":\"2.1.2\",\"description\":\"A pure JavaScript component for generating modals\",\"main\":\"index.js\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Joshua-W-Adams/modalator.git\"},\"author\":\"Joshua Adams\",\"license\":\"ISC\",\"bugs\":{\"url\":\"https://github.com/Joshua-W-Adams/modalator/issues\"},\"homepage\":\"https://github.com/Joshua-W-Adams/modalator#readme\",\"devDependencies\":{\"@babel/core\":\"^7.8.4\",\"@babel/preset-env\":\"^7.8.4\",\"babel-loader\":\"^8.0.6\",\"eslint-config-airbnb-base\":\"^14.0.0\",\"eslint-plugin-import\":\"^2.20.0\",\"express\":\"^4.17.1\",\"gulp\":\"^4.0.2\",\"gulp-concat\":\"^2.6.1\",\"gulp-eslint\":\"^6.0.0\",\"gulp-minify-css\":\"^1.2.4\",\"gulp-nodemon\":\"^2.5.0\",\"gulp-rename\":\"^2.0.0\",\"gulp-sass\":\"^4.0.2\",\"gulp-stylelint\":\"^13.0.0\",\"stylelint\":\"^13.0.0\",\"stylelint-config-recommended\":\"^3.0.0\",\"webpack-stream\":\"^5.2.1\"},\"dependencies\":{\"componator\":\"^2.0.1\"}}");
+module.exports = JSON.parse("{\"name\":\"modalator\",\"version\":\"2.1.3\",\"description\":\"A pure JavaScript component for generating modals\",\"main\":\"index.js\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Joshua-W-Adams/modalator.git\"},\"author\":\"Joshua Adams\",\"license\":\"ISC\",\"bugs\":{\"url\":\"https://github.com/Joshua-W-Adams/modalator/issues\"},\"homepage\":\"https://github.com/Joshua-W-Adams/modalator#readme\",\"devDependencies\":{\"@babel/core\":\"^7.8.4\",\"@babel/preset-env\":\"^7.8.4\",\"babel-loader\":\"^8.0.6\",\"eslint-config-airbnb-base\":\"^14.0.0\",\"eslint-plugin-import\":\"^2.20.0\",\"express\":\"^4.17.1\",\"gulp\":\"^4.0.2\",\"gulp-concat\":\"^2.6.1\",\"gulp-eslint\":\"^6.0.0\",\"gulp-minify-css\":\"^1.2.4\",\"gulp-nodemon\":\"^2.5.0\",\"gulp-rename\":\"^2.0.0\",\"gulp-sass\":\"^4.0.2\",\"gulp-stylelint\":\"^13.0.0\",\"stylelint\":\"^13.0.0\",\"stylelint-config-recommended\":\"^3.0.0\",\"webpack-stream\":\"^5.2.1\"},\"dependencies\":{\"componator\":\"^2.0.1\"}}");
 
 /***/ }),
 /* 2 */
@@ -232,7 +232,7 @@ function _getDefaultConfig(_this) {
             content: 'X'
           },
           // https://stackoverflow.com/questions/4011793/this-is-undefined-in-javascript-class-methods
-          onclick: _this.hide.bind(_this),
+          onclick: hide.bind(_this),
           onmouseover: componator.defaultOnMouseOverColor,
           onmouseout: componator.defaultOnMouseOutColor,
           style: {
@@ -279,7 +279,7 @@ function _getDefaultConfig(_this) {
             element: {
               value: 'button'
             },
-            onclick: _this.hide.bind(_this),
+            onclick: hide.bind(_this),
             onmouseover: componator.defaultOnMouseOverBackground,
             onmouseout: componator.defaultOnMouseOutBackground,
             style: {
@@ -296,7 +296,7 @@ function _getDefaultConfig(_this) {
             element: {
               value: 'button'
             },
-            onclick: _this.hide.bind(_this),
+            onclick: hide.bind(_this),
             onmouseover: componator.defaultOnMouseOverBackground,
             onmouseout: componator.defaultOnMouseOutBackground,
             style: {

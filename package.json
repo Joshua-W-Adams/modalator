@@ -1,6 +1,6 @@
 {
   "name": "modalator",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A pure JavaScript component for generating modals",
   "main": "index.js",
   "repository": {

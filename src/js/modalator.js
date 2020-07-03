@@ -88,7 +88,7 @@ function _getDefaultConfig(_this) {
             content: 'X'
           },
           // https://stackoverflow.com/questions/4011793/this-is-undefined-in-javascript-class-methods
-          onclick: _this.hide.bind(_this),
+          onclick: hide.bind(_this),
           onmouseover: componator.defaultOnMouseOverColor,
           onmouseout: componator.defaultOnMouseOutColor,
           style: {
@@ -135,7 +135,7 @@ function _getDefaultConfig(_this) {
             element: {
               value: 'button'
             },
-            onclick: _this.hide.bind(_this),
+            onclick: hide.bind(_this),
             onmouseover: componator.defaultOnMouseOverBackground,
             onmouseout: componator.defaultOnMouseOutBackground,
             style: {
@@ -152,7 +152,7 @@ function _getDefaultConfig(_this) {
             element: {
               value: 'button'
             },
-            onclick: _this.hide.bind(_this),
+            onclick: hide.bind(_this),
             onmouseover: componator.defaultOnMouseOverBackground,
             onmouseout: componator.defaultOnMouseOutBackground,
             style: {
